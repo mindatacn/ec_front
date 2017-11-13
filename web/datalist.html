@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>营销线索检索与推送-营销线索平台</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/page/data-list.css">
+</head>
+<body>
+    <div class="containers data-list" id="datalist">
+        <div class="header">
+            <div class="logo">
+                <img src="images/logo.png"/>
+            </div>
+            <div class="logout">
+                <a href="javascript:void(0)" onclick="logout()">退出登录</a>
+            </div>
+            <div class="login-info">
+                您好，<span>{{username}}</span>，欢迎使用营销线索数据平台
+            </div>
+        </div>
+        <div class="content">
+            <div class="main">
+                <div class="main-search">
+                    <div class="search-top">
+                        <div class="search-input" id="keywords">
+                            <div class="input-text">
+                                <div class="input-drop">
+                                    <span>全文检索</span><span class="drop-down"></span>
+                                    <ul>
+                                        <li data-code="extra"><p>全文检索</p><p class="drop-up"></p></li>
+                                        <li data-code="companyName"><p>企业名称</p></li>
+                                        <li data-code="address"><p>详细地址</p></li>
+                                        <li data-code="jobName"><p>职位名称</p></li>
+                                        <li data-code="comintro"><p>企业简介</p></li>
+                                    </ul>
+                                </div>
+                                <div class="input-txt">
+                                    <input type="text" class="txt-com" placeholder="请输入关键字" value="" id="search-txt">
+                                    <span class="icon-search"></span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-com" v-on:click="searchByKeywords()">查询</button>
+                        </div>
+                        <!--<div class="msg-info">tips:所有条件均可多选</div>-->
+                    </div>
+                    <div class="search-bottom">
+                        <ul class="main-list">
+                            <li id="province">
+                                <span class="item-title">区域：</span>
+                                <span class="item-list">
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('0','province')" class="current" name="all">不限</a>
+                                    <a href="javascript:void(0)" v-for="(value,key) in provinceMap" v-on:click="searchSelect(value.id,'province')" v-bind:data-id="value.id">{{value.name}}</a>
+                                </span>
+                                <div class="list-children">
+                                    <div class="item-children">
+                                        <ul id="city">
+                                            <li v-for="(value,key) in cityMap" v-bind:id="value.code">
+                                                <span class="item-title">{{value.name}}：</span>
+                                                <span class="item-list">
+                                                    <a href="javascript:void(0)" v-on:click="searchSelect('0',value.code,'city')" class="current" name="all">不限</a>
+                                                    <a href="javascript:void(0)"  v-for="(lvalue,lkey) in value.list" v-on:click="searchSelect(lvalue.id,value.code,'city')" v-bind:data-id="lvalue.id">{{lvalue.name}}</a>
+                                                </span>
+                                            </li>
+                                        </ul>
+                                        <div class="opts">
+                                            <button type="button" class="btn-com">收起</button>
+                                        </div>
+                                    </div>
+                                    <span class="bg"></span>
+                                </div>
+                                <a href="#" class="opts-a">已选地区</a>
+                            </li>
+                            <li id="vocation">
+                                <span class="item-title">行业：</span>
+                                <span class="item-list">
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('0','vocation')" class="current" name="all">不限</a>
+                                    <a href="javascript:void(0)" v-for="(value,key) in vocationMap"  v-on:click="searchSelect(value.vocationCode,'vocation')" v-bind:data-id="value.vocationCode">{{value.vocationName}}</a>
+                                </span>
+                            </li>
+                            <li id="size">
+                                <span class="item-title">规模：</span>
+                                <span class="item-list">
+                                    <a href="javascript:void(0)"  v-on:click="searchSelect('0','size')" class="current" name="all">不限</a>
+                                    <a href="javascript:void(0)"  v-on:click="searchSelect('1','size')" data-id="1">0-50人</a>
+                                    <a href="javascript:void(0)"  v-on:click="searchSelect('2','size')" data-id="2">51-150人</a>
+                                    <a href="javascript:void(0)"  v-on:click="searchSelect('3','size')" data-id="3">151-500人</a>
+                                    <a href="javascript:void(0)"  v-on:click="searchSelect('4','size')" data-id="4">501-2000人</a>
+                                    <a href="javascript:void(0)"  v-on:click="searchSelect('5','size')" data-id="5">2000人以上</a>
+                                </span>
+                            </li>
+                            <li id="website">
+                                <span class="item-title">来源：</span>
+                                <span class="item-list">
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('0','website')" class="current" name="all">不限</a>
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('1','website')" data-id="1">58同城</a>
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('2','website')" data-id="2">3158招商加盟</a>
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('3','website')" data-id="3">黄页88</a>
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('4','website')" data-id="4">企查查</a>
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('5','website')" data-id="5">智联招聘</a>
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('6','website')" data-id="6">前程无忧</a>
+                                    <a href="javascript:void(0)" v-on:click="searchSelect('7','website')" data-id="7">赶集网</a>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="item-title">其他：</span>
+                                <span class="item-list">
+                                    <a v-bind:class={"check-item":"true","current":isHavePhone} v-on:click="searchCheck(1)"><span class="icon"><span v-bind:class="{checked:isHavePhone}"></span></span><span class="font">有手机号码</span></a>
+                                    <a v-bind:class={"check-item":"true","current":isRecruitment} v-on:click="searchCheck(2)"><span class="icon"><span v-bind:class="{checked:isRecruitment}"></span></span><span class="font">有销售招聘信息</span></a>
+                                </span>
+                            </li>
+                        </ul>
+                        <div class="more"><span class="down"></span></div>
+                    </div>
+                </div>
+                <div class="main-msg">
+                    <div class="pull-left">查询符合上述条件的营销线索数据<span class="front-blue">{{tableData.totalCount}}</span>条</div>
+                    <div class="pull-right">
+                        <p>您今天的推送额度：<span class="front-blue">{{pushData.pushedCount}}/{{pushData.pushTotal}}</span></p>
+                        <div class="data-progress">
+                            <div class="progressing" v-bind:style={"width":pushData.percent}></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-data">
+                    <div class="data-table">
+                        <!--列表无数据-->
+                        <div class="blank-msg" v-bind:class={"hidden":tableData.list}>对不起，没有找到符合您条件的信息！</div>
+                        <!--数据列表-->
+                        <table cellpadding="0" cellspacing="0" border="0" v-bind:class={"hidden":!tableData.list}>
+                            <thead>
+                            <tr>
+                                <td style="width: 3%;"><a class="check-item" name="list-all"><span class="icon"><span class=""></span></span></a></span></span></td><td style="width: 27%;">企业名称</td><td style="width: 10%;">区域</td><td style="width: 15%;">行业</td><td style="width: 15%;">联系人</td><td style="width: 15%;">电话</td><td style="width: 15%;">操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(value,key) in tableData.list" v-bind:data-id="value.id">
+                                <td><a class="check-item" name="list-item" v-bind:data-id="value.id"><span class="icon"><span class=""></span></span></a></td>
+                                <td>{{value.company}}</td>
+                                <td>{{value.province}}</td>
+                                <td>{{value.vocation}}</td>
+                                <td>{{value.name}}</td>
+                                <td>{{value.mobile}}</td>
+                                <td>
+                                    <span class="opts">
+                                        <a href="javascript:" class="detail" title="查看详情" v-on:click="showDetails(value.id)"></a>
+                                        <a href="javascript:" class="push" title="推送" v-on:click="push(value.id)"></a>
+                                    </span>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <div v-bind:class={"table-opts":"true","hidden":!tableData.list}>
+                            <div class="pull-left">
+                                <a class="check-item" name="list-all"><span class="icon"><span class=""></span></span><span class="font">全选</span></a>
+                            </div>
+                            <div class="pull-right">
+                                <button type="button" v-on:click="pushAll()">推送</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-bind:class={"data-pager":"true","hidden":!tableData.list}>
+                        <div class="pager-box">
+                            <ul>
+                                <li v-if="pagers.hasPrev"><a href="javascript:void(0)" v-on:click="prev()">上一页</a></li>
+                                <li v-else-if="!pagers.hasPrev"><a class="disabled">上一页</a></li>
+                                <li v-for="p in pagers.pagerlist">
+                                    <a v-if="p==pagers.index" class="current">{{p}}</a>
+                                    <a v-else-if="p!=pagers.index" href="javascript:void(0)" v-on:click="goto(p)">{{p}}</a>
+                                </li>
+                                <li v-if="pagers.hasNext"><a href="javascript:void(0)" v-on:click="next()">下一页</a></li>
+                                <li v-else-if="!pagers.hasNext"><a class="disabled">下一页</a></li>
+                            </ul>
+                            <span>共{{tableData.totalPage}}页，跳到第</span>
+                            <input type="text" value="1" id="go-page">
+                            <span>页</span>
+                            <button type="button" class="btn-com1" v-on:click="goto()">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="aside">
+                <ul>
+                    <li class="current"><a href="datalist.html"><span class="data"></span><p>线索检索与推送</p></a></li>
+                    <!--<li><a href="#"><span class="history"></span><p>线索推送历史</p></a></li>-->
+                    <li><a href="statistics.html" v-bind:class={"hidden":isHiddenMenu}><span class="static"></span><p>营销数据统计</p></a></li>
+                    <!--<li><a href="#"><span class="setting"></span><p>个人信息设置</p></a></li>-->
+                </ul>
+            </div>
+        </div>
+        <!--modal-->
+        <!--modal-alert-->
+        <div class="modal fade modal-alert" id="com-alert1" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>线索数据推送成功</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-com" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--<div class="modal fade modal-alert" id="com-alert2" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>信息提交成功</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn-com" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <!--modal-layer-->
+        <div class="modal fade modal-layer" id="com-layer1" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">企业详情</h4>
+                    </div>
+                    <div class="modal-body" v-bind:data-id="Detail.id">
+                        <div class="group-inline">
+                            <span class="group-title">企业名称：</span>
+                            <span class="group-content">{{Detail.company}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">公司地址：</span>
+                            <span class="group-content">{{Detail.address}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">联系人：</span>
+                            <span class="group-content">{{Detail.name}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">手机：</span>
+                            <span class="group-content">{{Detail.mobile}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">电话：</span>
+                            <span class="group-content">{{Detail.phone}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">区域：</span>
+                            <span class="group-content">{{dataMapProvice[Detail.province]}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">行业：</span>
+                            <span class="group-content">{{dataMapVocation[Detail.vocation]}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">规模：</span>
+                            <span class="group-content">{{dataMapSize[Detail.memberSizeTag]}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">公司简介：</span>
+                            <span class="group-content">{{Detail.memo}}</span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn-com" v-on:click="push(Detail.id)">推送</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--javascript-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/json2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/page/base.js"></script>
+    <script src="js/page/datalist.js"></script>
+</body>
+</html>
