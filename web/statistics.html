@@ -174,9 +174,9 @@
             </div>
             <div class="aside">
                 <ul>
-                    <li><a href="datalist.html"><span class="data"></span><p>线索检索与推送</p></a></li>
+                    <li v-bind:class={"hidden":isHiddenDataMenu}><a href="datalist.html"><span class="data"></span><p>线索检索与推送</p></a></li>
                     <!--<li><a href="#"><span class="history"></span><p>线索推送历史</p></a></li>-->
-                    <li class="current"><a href="statistics.html" v-bind:class={"hidden":isHiddenMenu}><span class="static"></span><p>营销数据统计</p></a></li>
+                    <li class="current" v-bind:class={"hidden":isHiddenStatisticsMenu}><a href="statistics.html"><span class="static"></span><p>营销数据统计</p></a></li>
                     <!--<li><a href="#"><span class="setting"></span><p>个人信息设置</p></a></li>-->
                 </ul>
             </div>
