@@ -50,41 +50,42 @@
                         <!--<div class="msg-info">tips:所有条件均可多选</div>-->
                     </div>
                     <div class="search-bottom">
-                        <ul class="main-list">
-                            <li id="province">
-                                <span class="item-title">区域：</span>
+                        <div class="search-bottom-main">
+                            <ul class="main-list">
+                                <li id="province">
+                                    <span class="item-title">区域：</span>
                                 <span class="item-list">
                                     <a href="javascript:void(0)" v-on:click="searchSelect('0','province')" class="current" name="all">不限</a>
                                     <a href="javascript:void(0)" v-for="(value,key) in provinceMap" v-on:click="searchSelect(value.id,'province')" v-bind:data-id="value.id">{{value.name}}</a>
                                 </span>
-                                <div class="list-children">
-                                    <div class="item-children">
-                                        <ul id="city">
-                                            <li v-for="(value,key) in cityMap" v-bind:id="value.code">
-                                                <span class="item-title">{{value.name}}：</span>
+                                    <div class="list-children">
+                                        <div class="item-children">
+                                            <ul id="city">
+                                                <li v-for="(value,key) in cityMap" v-bind:id="value.code">
+                                                    <span class="item-title">{{value.name}}：</span>
                                                 <span class="item-list">
                                                     <a href="javascript:void(0)" v-on:click="searchSelect('0',value.code,'city')" class="current" name="all">不限</a>
                                                     <a href="javascript:void(0)"  v-for="(lvalue,lkey) in value.list" v-on:click="searchSelect(lvalue.id,value.code,'city')" v-bind:data-id="lvalue.id">{{lvalue.name}}</a>
                                                 </span>
-                                            </li>
-                                        </ul>
-                                        <div class="opts">
-                                            <button type="button" class="btn-com">收起</button>
+                                                </li>
+                                            </ul>
+                                            <div class="opts">
+                                                <button type="button" class="btn-com">收起</button>
+                                            </div>
                                         </div>
+                                        <span class="bg"></span>
                                     </div>
-                                    <span class="bg"></span>
-                                </div>
-                                <a href="#" class="opts-a">已选地区</a>
-                            </li>
-                            <li id="vocation">
-                                <span class="item-title">行业：</span>
+                                    <a href="#" class="opts-a">已选地区</a>
+                                </li>
+                                <li id="vocation">
+                                    <span class="item-title">行业：</span>
                                 <span class="item-list">
                                     <a href="javascript:void(0)" v-on:click="searchSelect('0','vocation')" class="current" name="all">不限</a>
                                     <a href="javascript:void(0)" v-for="(value,key) in vocationMap"  v-on:click="searchSelect(value.vocationCode,'vocation')" v-bind:data-id="value.vocationCode">{{value.vocationName}}</a>
                                 </span>
-                            </li>
-                            <li id="size">
-                                <span class="item-title">规模：</span>
+                                </li>
+                                <li id="size">
+                                    <span class="item-title">规模：</span>
                                 <span class="item-list">
                                     <a href="javascript:void(0)"  v-on:click="searchSelect('0','size')" class="current" name="all">不限</a>
                                     <a href="javascript:void(0)"  v-on:click="searchSelect('1','size')" data-id="1">0-50人</a>
@@ -93,9 +94,9 @@
                                     <a href="javascript:void(0)"  v-on:click="searchSelect('4','size')" data-id="4">501-2000人</a>
                                     <a href="javascript:void(0)"  v-on:click="searchSelect('5','size')" data-id="5">2000人以上</a>
                                 </span>
-                            </li>
-                            <li id="website">
-                                <span class="item-title">来源：</span>
+                                </li>
+                                <li id="website">
+                                    <span class="item-title">来源：</span>
                                 <span class="item-list">
                                     <a href="javascript:void(0)" v-on:click="searchSelect('0','website')" class="current" name="all">不限</a>
                                     <a href="javascript:void(0)" v-on:click="searchSelect('1','website')" data-id="1">58同城</a>
@@ -106,15 +107,16 @@
                                     <a href="javascript:void(0)" v-on:click="searchSelect('6','website')" data-id="6">前程无忧</a>
                                     <a href="javascript:void(0)" v-on:click="searchSelect('7','website')" data-id="7">赶集网</a>
                                 </span>
-                            </li>
-                            <li>
-                                <span class="item-title">其他：</span>
+                                </li>
+                                <li>
+                                    <span class="item-title">其他：</span>
                                 <span class="item-list">
                                     <a v-bind:class={"check-item":"true","current":isHavePhone} v-on:click="searchCheck(1)"><span class="icon"><span v-bind:class="{checked:isHavePhone}"></span></span><span class="font">有手机号码</span></a>
                                     <a v-bind:class={"check-item":"true","current":isRecruitment} v-on:click="searchCheck(2)"><span class="icon"><span v-bind:class="{checked:isRecruitment}"></span></span><span class="font">有销售招聘信息</span></a>
                                 </span>
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="more"><span class="down"></span></div>
                     </div>
                 </div>
@@ -164,7 +166,7 @@
                             </div>
                         </div>
                     </div>
-                    <div v-bind:class={"data-pager":"true","hidden":!tableData.list}>
+                    <div v-if="tableData.totalPage>1" v-bind:class={"data-pager":"true","hidden":!tableData.list}>
                         <div class="pager-box">
                             <ul>
                                 <li v-if="pagers.hasPrev"><a href="javascript:void(0)" v-on:click="prev()">上一页</a></li>
