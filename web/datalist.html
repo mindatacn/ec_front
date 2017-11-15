@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="css/page/data-list.css">
+    <link rel="stylesheet" href="css/page/data-list.css?v=150901">
 </head>
 <body>
     <div class="containers data-list" id="datalist">
@@ -151,7 +151,8 @@
                                 <td>
                                     <span class="opts">
                                         <a href="javascript:" class="detail" title="查看详情" v-on:click="showDetails(value.id)"></a>
-                                        <a href="javascript:" class="push" title="推送" v-on:click="push(value.id)"></a>
+                                        <a href="javascript:" class="push" title="推送" v-on:click="push(value.id)" v-if="pushData.pushedCount<pushData.pushTotal"></a>
+                                        <a href="javascript:" class="push" title="推送" v-if="pushData.pushedCount>=pushData.pushTotal" style="cursor:no-drop;"></a>
                                     </span>
                                 </td>
                             </tr>
@@ -162,7 +163,8 @@
                                 <a class="check-item" name="list-all"><span class="icon"><span class=""></span></span><span class="font">全选</span></a>
                             </div>
                             <div class="pull-right">
-                                <button type="button" v-on:click="pushAll()">推送</button>
+                                <button type="button" v-on:click="pushAll()" v-if="pushData.pushedCount<pushData.pushTotal">推送</button>
+                                <button type="button" v-if="pushData.pushedCount>=pushData.pushTotal" style="cursor:no-drop;">推送</button>
                             </div>
                         </div>
                     </div>
@@ -280,7 +282,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn-default" data-dismiss="modal">关闭</button>
-                        <button type="button" class="btn-com" v-on:click="push(Detail.id)">推送</button>
+                        <button type="button" class="btn-com" v-on:click="push(Detail.id)" v-if="pushData.pushedCount<pushData.pushTotal">推送</button>
+                        <button type="button" class="btn-com" v-if="pushData.pushedCount>=pushData.pushTotal" style="cursor:no-drop;">推送</button>
                     </div>
                 </div>
             </div>
@@ -292,6 +295,6 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
     <script src="js/page/base.js"></script>
-    <script src="js/page/datalist.js"></script>
+    <script src="js/page/datalist.js?v=150901"></script>
 </body>
 </html>
