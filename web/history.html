@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>营销线索检索与推送-营销线索平台</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/combo.select.min.css">
+    <link rel="stylesheet" href="css/page/history.css?v=1256908">
+</head>
+<body>
+    <div class="containers" id="history">
+        <div class="header">
+            <div class="logo">
+                <img src="images/logo.png"/>
+                <div class="logo-title">营销线索管理平台</div>
+            </div>
+            <div class="logout" onclick="logout()">
+                <a href="javascript:void(0)" title="退出登录"></a>
+            </div>
+            <div class="user-setting">
+                <span class="icon-setting" title="个人设置"></span>
+                <div class="user-setting-list">
+                    <ul>
+                        <li>
+                            <a href="history.html">
+                                <span class="user-success"></span>
+                                <span class="user-font">推送成功</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="history_failed.html">
+                                <span class="user-failed"></span>
+                                <span class="user-font">推送失败</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="setting.html">
+                                <span class="user-password"></span>
+                                <span class="user-font">密码修改</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-info-inner">
+                    <span class="user-icon"></span>
+                    <span class="user-name">{{user.username}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="main">
+                <div class="search">
+                    <div class="search-title">
+                        <h3>查询条件</h3>
+                    </div>
+                    <div class="search-content">
+                        <div class="search-item-inline">
+                            <div class="search-item-title">企业名称：</div>
+                            <div class="search-item-content">
+                                <input type="text" value="" class="text-common" id="unit-name" placeholder="全部企业">
+                            </div>
+                        </div>
+                        <!--<div class="search-item-inline">
+                            <div class="search-item-title">沟通结果：</div>
+                            <div class="search-item-content">
+                                <select class="text-common">
+                                    <option value="0">全部</option>
+                                    <option value="1">未沟通</option>
+                                    <option value="2">跟进中</option>
+                                    <option value="3">已成单</option>
+                                    <option value="4">已放弃</option>
+                                </select>
+                            </div>
+                        </div>-->
+                        <div class="search-item-inline">
+                            <div class="search-item-title">推送时间：</div>
+                            <div class="search-item-content">
+                                <input type="text" v-bind:value="search.beginTime" class="text-common" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'end-date\')}'})" id="start-date">
+                                <span>-</span>
+                                <input type="text" v-bind:value="search.endTime" class="text-common" onclick="WdatePicker({minDate:'#F{$dp.$D(\'start-date\')}',maxDate:'%y'})" id="end-date">
+                            </div>
+                        </div>
+                        <div class="search-item-inline search-item-btn">
+                            <button type="button" class="btn-common" v-on:click="searchList()">查询</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+                <div class="table-common">
+                    <div class="table-msg">查询符合上述条件的推送历史数据<span class="font-blue">{{data.totalCount}}</span>条</div>
+                    <div class="table-data">
+                        <!--列表无数据-->
+                        <div class="table-data-blank" v-if="data.totalCount<=0">对不起，没有找到符合您条件的信息！</div>
+                        <!--列表有数据-->
+                        <table cellpadding="0" cellspacing="0" border="0" v-if="data.totalCount>0">
+                            <thead>
+                            <tr>
+                                <td style="width: 5%;">编号</td>
+                                <td style="width: 35%;">线索企业名称</td>
+                                <td style="width: 20%;">推送时间</td>
+                                <td style="width: 20%;">最后沟通时间</td>
+                                <td style="width: 10%;">沟通结果</td>
+                                <td style="width: 10%;">操作</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(value,key) in data.list" v-bind:id="value.contactId">
+                                <td>{{key+1}}</td>
+                                <td>{{value.company}}</td>
+                                <td>{{value.createTime}}</td>
+                                <td>{{value.lastContactTime}}</td>
+                                <td>
+                                    <span class="state state-1" v-if="value.saleState=='1'">未沟通</span>
+                                    <span class="state state-2" v-if="value.saleState=='2'">跟进中</span>
+                                </td>
+                                <td><button type="button" class="btn-detail" title="详情" v-on:click="showDetail(value.contactId)"></button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-pager" v-if="data.totalPage>1">
+                        <div class="pager-box">
+                            <ul>
+                                <li v-if="pagers.prev"><a href="javascript:void(0)" v-on:click="prev()">上一页</a></li>
+                                <li v-else-if="!pagers.prev"><a class="disabled">上一页</a></li>
+                                <li v-for="p in pagers.pagers">
+                                    <a v-if="p==pagers.index" class="current">{{p}}</a>
+                                    <a v-else-if="p!=pagers.index" href="javascript:void(0)" v-on:click="goto(p)">{{p}}</a>
+                                </li>
+                                <li v-if="pagers.next"><a href="javascript:void(0)" v-on:click="next()">下一页</a></li>
+                                <li v-else-if="!pagers.next"><a class="disabled">下一页</a></li>
+                            </ul>
+                            <span>共{{data.totalPage}}页，跳到第</span><input type="text" value="1" id="go-page"><span>页</span>
+                            <button type="button" class="btn-com1" v-on:click="goto()">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="aside">
+                <ul>
+                    <li><a href="datalist.html"><span class="data"></span><p>检索与推送</p></a></li>
+                    <li v-if="user.role!='user'"><a href="statistics.html"><span class="static"></span><p>数据统计</p></a></li>
+                </ul>
+            </div>
+        </div>
+        <!--modal-layer-->
+        <div class="modal fade modal-layer" id="data-detail" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">操作信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="group-inline">
+                            <span class="group-title">推送时间：</span>
+                            <span class="group-content">{{detail.createTime}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">沟通状态：</span>
+                            <span class="group-content">{{detail.saleState}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">最后沟通时间：</span>
+                            <span class="group-content">{{detail.lastContactTime}}</span>
+                        </div>
+                    </div>
+                    <div class="modal-header">
+                        <h4 class="modal-title">企业详情</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="group-inline">
+                            <span class="group-title">企业名称：</span>
+                            <span class="group-content">{{detail.company}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">公司地址：</span>
+                            <span class="group-content">{{detail.address}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">联系人：</span>
+                            <span class="group-content">{{detail.name}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">手机：</span>
+                            <span class="group-content">{{detail.mobile}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">电话：</span>
+                            <span class="group-content">{{detail.phone}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">区域：</span>
+                            <span class="group-content">{{dataMapProvice[detail.province]}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">行业：</span>
+                            <span class="group-content">{{dataMapVocation[detail.vocation]}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">规模：</span>
+                            <span class="group-content">{{dataMapSize[detail.memberSizeTag]}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">招聘职位：</span>
+                            <span class="group-content">{{detail.jobName}}</span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">公司简介：</span>
+                            <span class="group-content">{{detail.memo}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--javascript-->
+    <script src="js/json2.min.js"></script>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/combo.select.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/datepicker/WdatePicker.js"></script>
+
+    <script src="js/page/base/common.js?v=1256908"></script>
+    <script src="js/page/base.js?v=1256908"></script>
+    <script src="js/page/history.js?v=1256908"></script>
+</body>
+</html>

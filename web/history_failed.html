@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>营销线索检索与推送-营销线索平台</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/combo.select.min.css">
+
+    <link rel="stylesheet" href="css/page/history.css?v=1256908">
+</head>
+<body>
+    <div class="containers" id="history">
+        <div class="header">
+            <div class="logo">
+                <img src="images/logo.png"/>
+                <div class="logo-title">营销线索管理平台</div>
+            </div>
+            <div class="logout" onclick="logout()">
+                <a href="javascript:void(0)" title="退出登录"></a>
+            </div>
+            <div class="user-setting">
+                <span class="icon-setting" title="个人设置"></span>
+                <div class="user-setting-list">
+                    <ul>
+                        <li>
+                            <a href="history.html">
+                                <span class="user-success"></span>
+                                <span class="user-font">推送成功</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="history_failed.html">
+                                <span class="user-failed"></span>
+                                <span class="user-font">推送失败</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="setting.html">
+                                <span class="user-password"></span>
+                                <span class="user-font">密码修改</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-info-inner">
+                    <span class="user-icon"></span>
+                    <span class="user-name">{{user.username}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="main">
+                <div class="search">
+                    <div class="search-title">
+                        <h3>查询条件</h3>
+                    </div>
+                    <div class="search-content">
+                        <div class="search-item-inline">
+                            <div class="search-item-title">线索企业名称：</div>
+                            <div class="search-item-content">
+                                <input type="text" value="" class="text-common" id="unit-name" placeholder="全部企业">
+                            </div>
+                        </div>
+                        <div class="search-item-inline">
+                            <div class="search-item-title">推送时间：</div>
+                            <div class="search-item-content">
+                                <input type="text" v-bind:value="search.start_date" class="text-common" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'end-date\')}'})" id="start-date">
+                                <span>-</span>
+                                <input type="text" v-bind:value="search.end_date" class="text-common" onclick="WdatePicker({minDate:'#F{$dp.$D(\'start-date\')}',maxDate:'%y'})" id="end-date">
+                            </div>
+                        </div>
+                        <div class="search-item-inline">
+                            <button type="button" class="btn-common" v-on:click="searchList()">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-common">
+                    <div class="table-msg">查询符合上述条件的推送历史数据<span class="font-blue">{{data.totalCount}}</span>条</div>
+                    <div class="table-data">
+                        <!--列表无数据-->
+                        <div class="table-data-blank" v-if="data.totalCount<=0">对不起，没有找到符合您条件的信息！</div>
+                        <!--列表有数据-->
+                        <table cellpadding="0" cellspacing="0" border="0" v-if="data.totalCount>0">
+                            <thead>
+                            <tr>
+                                <td style="width: 5%;">编号</td>
+                                <td style="width: 30%;">线索企业名称</td>
+                                <td style="width: 15%;">推送时间</td>
+                                <td style="width: 50%;">推送失败的原因</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(value,key) in data.list">
+                                <td>{{key+1}}</td>
+                                <td>{{value.companyName}}</td>
+                                <td>{{value.pushTime}}</td>
+                                <td>{{value.failReason}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-pager" v-if="data.totalPage>1">
+                        <div class="pager-box">
+                            <ul>
+                                <li v-if="pagers.prev"><a href="javascript:void(0)" v-on:click="prev()">上一页</a></li>
+                                <li v-else-if="!pagers.prev"><a class="disabled">上一页</a></li>
+                                <li v-for="p in pagers.pagers">
+                                    <a v-if="p==pagers.index" class="current">{{p}}</a>
+                                    <a v-else-if="p!=pagers.index" href="javascript:void(0)" v-on:click="goto(p)">{{p}}</a>
+                                </li>
+                                <li v-if="pagers.next"><a href="javascript:void(0)" v-on:click="next()">下一页</a></li>
+                                <li v-else-if="!pagers.next"><a class="disabled">下一页</a></li>
+                            </ul>
+                            <span>共{{data.totalPage}}页，跳到第</span><input type="text" value="1" id="go-page"><span>页</span>
+                            <button type="button" class="btn-com1" v-on:click="goto()">确定</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="aside">
+                <ul>
+                    <li><a href="datalist.html"><span class="data"></span><p>检索与推送</p></a></li>
+                    <li v-if="user.role!='user'"><a href="statistics.html"><span class="static"></span><p>数据统计</p></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--javascript-->
+    <script src="js/json2.min.js"></script>
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/combo.select.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/datepicker/WdatePicker.js"></script>
+
+    <script src="js/page/base/common.js?v=1256908"></script>
+    <script src="js/page/base.js?v=1256908"></script>
+    <script src="js/page/history_failed.js?v=1256908"></script>
+</body>
+</html>
