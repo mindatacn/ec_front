@@ -4,24 +4,52 @@
     <meta charset="UTF-8">
     <title>营销线索检索与推送-营销线索平台</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="css/page/data-list.css?v=150901">
+    <link rel="stylesheet" href="css/page/data-list.css?v=1256908">
 </head>
 <body>
     <div class="containers data-list" id="datalist">
         <div class="header">
             <div class="logo">
                 <img src="images/logo.png"/>
+                <div class="logo-title">营销线索管理平台</div>
             </div>
-            <div class="logout">
-                <a href="javascript:void(0)" onclick="logout()" title="退出登录"></a>
+            <div class="logout" onclick="logout()">
+                <a href="javascript:void(0)" title="退出登录"></a>
             </div>
-            <div class="login-info">
-                您好，<span>{{username}}</span>，欢迎使用营销线索数据平台
+            <div class="user-setting">
+                <span class="icon-setting" title="个人设置"></span>
+                <div class="user-setting-list">
+                    <ul>
+                        <li>
+                            <a href="history.html">
+                                <span class="user-success"></span>
+                                <span class="user-font">推送成功</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="history_failed.html">
+                                <span class="user-failed"></span>
+                                <span class="user-font">推送失败</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="setting.html">
+                                <span class="user-password"></span>
+                                <span class="user-font">密码修改</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-info-inner">
+                    <span class="user-icon"></span>
+                    <span class="user-name">{{username}}</span>
+                </div>
             </div>
         </div>
         <div class="content">
@@ -190,10 +218,8 @@
             </div>
             <div class="aside">
                 <ul>
-                    <li class="current" v-bind:class={"hidden":isHiddenDataMenu}><a href="datalist.html" ><span class="data"></span><p>线索检索与推送</p></a></li>
-                    <!--<li><a href="#"><span class="history"></span><p>线索推送历史</p></a></li>-->
-                    <li><a href="statistics.html" v-bind:class={"hidden":isHiddenStatisticsMenu}><span class="static"></span><p>营销数据统计</p></a></li>
-                    <!--<li><a href="#"><span class="setting"></span><p>个人信息设置</p></a></li>-->
+                    <li class="current" v-if="isHiddenDataMenu==false"><a href="datalist.html" ><span class="data"></span><p>检索与推送</p></a></li>
+                    <li v-if="isHiddenStatisticsMenu==false"><a href="statistics.html"><span class="static"></span><p>数据统计</p></a></li>
                 </ul>
             </div>
         </div>
@@ -294,7 +320,7 @@
     <script src="js/json2.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
-    <script src="js/page/base.js"></script>
-    <script src="js/page/datalist.js?v=150901"></script>
+    <script src="js/page/base.js?v=1256908"></script>
+    <script src="js/page/datalist.js?v=1256908"></script>
 </body>
 </html>

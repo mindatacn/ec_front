@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>营销线索检索与推送-营销线索平台</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/page/setting.css?v=1256908">
+</head>
+<body>
+    <div class="containers" id="settings">
+        <div class="header">
+            <div class="logo">
+                <img src="images/logo.png"/>
+                <div class="logo-title">营销线索管理平台</div>
+            </div>
+            <div class="logout" onclick="logout()">
+                <a href="javascript:void(0)" title="退出登录"></a>
+            </div>
+            <div class="user-setting" v-if="user.role!='manager'">
+                <span class="icon-setting" title="个人设置"></span>
+                <div class="user-setting-list">
+                    <ul>
+                        <li>
+                            <a href="history.html">
+                                <span class="user-success"></span>
+                                <span class="user-font">推送成功</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="history_failed.html">
+                                <span class="user-failed"></span>
+                                <span class="user-font">推送失败</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="setting.html">
+                                <span class="user-password"></span>
+                                <span class="user-font">密码修改</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="user-setting" v-if="user.role=='manager'" onclick="window.location.href='setting.html'">
+                <span class="icon-setting" title="个人设置"></span>
+            </div>
+            <div class="user-info">
+                <div class="user-info-inner">
+                    <span class="user-icon"></span>
+                    <span class="user-name">{{user.username}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="main">
+                <!--密码修改-->
+                <div class="base-group" id="setting">
+                    <div class="group-title">
+                        <ul class="tab-title">
+                            <li>密码修改</li>
+                        </ul>
+                    </div>
+                    <div class="group-content">
+                        <div class="tab-content">
+                            <div class="tab-item">
+                                <div class="group-inline">
+                                    <div class="group-inline-item">原密码：</div>
+                                    <div class="group-inline-item">
+                                        <input type="password" class="text-common" value="" id="oldPassword" placeholder="请输入原密码">
+                                    </div>
+                                    <div class="group-inline-item"><span class="msg-wrong hidden">原密码不能为空</span></div>
+                                </div>
+                                <div class="group-inline">
+                                    <div class="group-inline-item">新密码：</div>
+                                    <div class="group-inline-item">
+                                        <input type="password" class="text-common" value="" id="newPassword" placeholder="请输入新密码">
+                                    </div>
+                                    <div class="group-inline-item"><span class="msg-wrong hidden">新密码不能为空/密码为6-16位数字</span></div>
+                                </div>
+                                <div class="group-inline">
+                                    <div class="group-inline-item">确认密码：</div>
+                                    <div class="group-inline-item">
+                                        <input type="password" class="text-common" value="" id="anewPassword" placeholder="请再次输入新密码">
+                                    </div>
+                                    <div class="group-inline-item"><span class="msg-wrong hidden">两次密码输入不一致</span></div>
+                                </div>
+                                <div class="group-inline">
+                                    <div class="group-inline-item">&nbsp;</div>
+                                    <div class="group-inline-item">
+                                        <button type="button" class="btn-common" v-on:click="submit">确认</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="aside">
+                <ul>
+                    <li v-if="user.role!='manager'"><a href="datalist.html"><span class="data"></span><p>检索与推送</p></a></li>
+                    <li v-if="user.role!='user'"><a href="statistics.html"><span class="static"></span><p>数据统计</p></a></li>
+                </ul>
+            </div>
+        </div>
+        <!--modal-alert-->
+        <div class="modal fade modal-alert" id="alert-modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>密码修改成功</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-common" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--javascript-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/json2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/page/base.js?v=1256908"></script>
+    <script src="js/page/setting.js?v=1256908"></script>
+</body>
+</html>
