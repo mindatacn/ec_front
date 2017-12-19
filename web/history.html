@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/combo.select.min.css">
-    <link rel="stylesheet" href="css/page/history.css?v=135098531">
+    <link rel="stylesheet" href="css/page/history.css?v=de127098">
 </head>
 <body>
     <div class="containers" id="history">
@@ -65,18 +65,20 @@
                                 <input type="text" value="" class="text-common" id="unit-name" placeholder="全部企业">
                             </div>
                         </div>
-                        <!--<div class="search-item-inline">
-                            <div class="search-item-title">沟通结果：</div>
+                        <div class="search-item-inline">
+                            <div class="search-item-title">沟通状态：</div>
                             <div class="search-item-content">
-                                <select class="text-common">
+                                <select class="text-common" id="saleState">
                                     <option value="0">全部</option>
-                                    <option value="1">未沟通</option>
-                                    <option value="2">跟进中</option>
-                                    <option value="3">已成单</option>
-                                    <option value="4">已放弃</option>
+                                    <option value="1">新入库</option>
+                                    <option value="2">感兴趣</option>
+                                    <option value="3">拜访/远程</option>
+                                    <option value="4">需求匹配</option>
+                                    <option value="5">合作成交</option>
+                                    <option value="6">已放弃</option>
                                 </select>
                             </div>
-                        </div>-->
+                        </div>
                         <div class="search-item-inline">
                             <div class="search-item-title">推送时间：</div>
                             <div class="search-item-content">
@@ -104,7 +106,7 @@
                                 <td style="width: 35%;">线索企业名称</td>
                                 <td style="width: 20%;">推送时间</td>
                                 <td style="width: 20%;">最后沟通时间</td>
-                                <td style="width: 10%;">沟通结果</td>
+                                <td style="width: 10%;">沟通状态</td>
                                 <td style="width: 10%;">操作</td>
                             </tr>
                             </thead>
@@ -115,8 +117,9 @@
                                 <td>{{value.createTime}}</td>
                                 <td>{{value.lastContactTime}}</td>
                                 <td>
-                                    <span class="state state-1" v-if="value.saleState=='1'">未沟通</span>
-                                    <span class="state state-2" v-if="value.saleState=='2'">跟进中</span>
+                                    <span class="state">{{value.saleStateName}}</span>
+                                    <!--<span class="state state-1" v-if="value.saleState=='1'">未沟通</span>-->
+                                    <!--<span class="state state-2" v-if="value.saleState=='2'">跟进中</span>-->
                                 </td>
                                 <td><button type="button" class="btn-detail" title="详情" v-on:click="showDetail(value.contactId)"></button></td>
                             </tr>
@@ -227,8 +230,8 @@
     <script src="js/vue.min.js"></script>
     <script src="js/datepicker/WdatePicker.js"></script>
 
-    <script src="js/page/base/common.js?v=135098531"></script>
-    <script src="js/page/base.js?v=135098531"></script>
-    <script src="js/page/history.js?v=135098531"></script>
+    <script src="js/page/base/common.js?v=de127098"></script>
+    <script src="js/page/base.js?v=de127098"></script>
+    <script src="js/page/history.js?v=de127098"></script>
 </body>
 </html>

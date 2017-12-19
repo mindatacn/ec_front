@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
-    <link rel="stylesheet" href="css/page/data-list.css?v=135098531">
+    <link rel="stylesheet" href="css/page/data-list.css?v=de127098">
 </head>
 <body>
     <div class="containers data-list" id="datalist">
@@ -59,13 +59,13 @@
                         <div class="search-input" id="keywords">
                             <div class="input-text">
                                 <div class="input-drop">
-                                    <span>全文检索</span><span class="drop-down"></span>
+                                    <span data-code="extra" data-scode="全文" >全文检索</span><span class="drop-down"></span>
                                     <ul>
-                                        <li data-code="extra"><p>全文检索</p><p class="drop-up"></p></li>
-                                        <li data-code="companyName"><p>企业名称</p></li>
-                                        <li data-code="address"><p>详细地址</p></li>
-                                        <li data-code="jobName"><p>职位名称</p></li>
-                                        <li data-code="comintro"><p>企业简介</p></li>
+                                        <li data-code="extra" data-scode="全文"><p>全文检索</p><p class="drop-up"></p></li>
+                                        <li data-code="companyName" data-scode="名称"><p>企业名称</p></li>
+                                        <li data-code="address" data-scode="地址"><p>详细地址</p></li>
+                                        <li data-code="jobName" data-scode="职位"><p>职位名称</p></li>
+                                        <li data-code="comintro" data-scode="简介"><p>企业简介</p></li>
                                     </ul>
                                 </div>
                                 <div class="input-txt">
@@ -73,7 +73,7 @@
                                     <span class="icon-search"></span>
                                 </div>
                             </div>
-                            <button type="button" class="btn-com" v-on:click="searchByKeywords()">查询</button>
+                            <button type="button" class="btn-com" v-on:click="searchByKeywords()" id="key-search">查询</button>
                         </div>
                         <!--<div class="msg-info">tips:所有条件均可多选</div>-->
                     </div>
@@ -81,71 +81,60 @@
                         <div class="search-bottom-main">
                             <ul class="main-list">
                                 <li id="province">
-                                    <span class="item-title">区域：</span>
-                                <span class="item-list">
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('0','province')" class="current" name="all">不限</a>
-                                    <a href="javascript:void(0)" v-for="(value,key) in provinceMap" v-on:click="searchSelect(value.id,'province')" v-bind:data-id="value.id">{{value.name}}</a>
-                                </span>
-                                    <div class="list-children">
-                                        <div class="item-children">
-                                            <ul id="city">
-                                                <li v-for="(value,key) in cityMap" v-bind:id="value.code">
-                                                    <span class="item-title">{{value.name}}：</span>
-                                                <span class="item-list">
-                                                    <a href="javascript:void(0)" v-on:click="searchSelect('0',value.code,'city')" class="current" name="all">不限</a>
-                                                    <a href="javascript:void(0)"  v-for="(lvalue,lkey) in value.list" v-on:click="searchSelect(lvalue.id,value.code,'city')" v-bind:data-id="lvalue.id">{{lvalue.name}}</a>
-                                                </span>
-                                                </li>
-                                            </ul>
-                                            <div class="opts">
-                                                <button type="button" class="btn-com">收起</button>
-                                            </div>
-                                        </div>
-                                        <span class="bg"></span>
-                                    </div>
-                                    <a href="#" class="opts-a">已选地区</a>
+                                    <span class="item-title">省市：</span><span class="item-more"></span>
+                                    <span class="item-list">
+                                        <a href="javascript:void(0)" v-on:click="searchSelect('0','province')" class="current" name="all">不限</a>
+                                        <a href="javascript:void(0)" v-for="(value,key) in provinceMap" v-on:click="searchSelect(value.id,'province')" v-bind:data-id="value.id">{{value.name}}</a>
+                                    </span>
+                                </li>
+                                <li id="city" style="display: none;">
+                                    <span class="item-title">地区：</span><span class="item-more" v-if="cityMap.length>1"></span>
+                                    <span class="item-list">
+                                        <span class="item-list-item" v-for="(value,key) in cityMap" v-bind:id="value.code">
+                                            <a href="javascript:void(0)" v-on:click="searchSelect('0','city',value.code)" class="current" name="all">{{value.name}}全部</a>
+                                            <a href="javascript:void(0)"  v-for="(lvalue,lkey) in value.list" v-on:click="searchSelect(lvalue.id,'city',value.code)" v-bind:data-id="lvalue.id">{{lvalue.name}}</a>
+                                        </span>
+                                    </span>
                                 </li>
                                 <li id="vocation">
-                                    <span class="item-title">行业：</span>
-                                <span class="item-list">
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('0','vocation')" class="current" name="all">不限</a>
-                                    <a href="javascript:void(0)" v-for="(value,key) in vocationMap"  v-on:click="searchSelect(value.vocationCode,'vocation')" v-bind:data-id="value.vocationCode">{{value.vocationName}}</a>
-                                </span>
+                                    <span class="item-title">行业：</span><span class="item-more"></span>
+                                    <span class="item-list">
+                                        <a href="javascript:void(0)" v-on:click="searchSelect('0','vocation')" class="current" name="all">不限</a>
+                                        <a href="javascript:void(0)" v-for="(value,key) in vocationMap"  v-on:click="searchSelect(value.vocationCode,'vocation')" v-bind:data-id="value.vocationCode">{{value.vocationName}}</a>
+                                    </span>
                                 </li>
                                 <li id="size">
                                     <span class="item-title">规模：</span>
-                                <span class="item-list">
-                                    <a href="javascript:void(0)"  v-on:click="searchSelect('0','size')" class="current" name="all">不限</a>
-                                    <a href="javascript:void(0)"  v-on:click="searchSelect('1','size')" data-id="1">0-50人</a>
-                                    <a href="javascript:void(0)"  v-on:click="searchSelect('2','size')" data-id="2">51-150人</a>
-                                    <a href="javascript:void(0)"  v-on:click="searchSelect('3','size')" data-id="3">151-500人</a>
-                                    <a href="javascript:void(0)"  v-on:click="searchSelect('4','size')" data-id="4">501-2000人</a>
-                                    <a href="javascript:void(0)"  v-on:click="searchSelect('5','size')" data-id="5">2000人以上</a>
-                                </span>
+                                    <span class="item-list">
+                                        <a href="javascript:void(0)"  v-on:click="searchSelect('0','size')" class="current" name="all">不限</a>
+                                        <a href="javascript:void(0)" v-for="(value,key) in sizeMap"  v-on:click="searchSelect(value.id,'size')" v-bind:data-id="value.id">{{value.name}}</a>
+                                    </span>
                                 </li>
                                 <li id="website">
                                     <span class="item-title">来源：</span>
-                                <span class="item-list">
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('0','website')" class="current" name="all">不限</a>
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('1','website')" data-id="1">58同城</a>
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('2','website')" data-id="2">3158招商加盟</a>
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('3','website')" data-id="3">黄页88</a>
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('4','website')" data-id="4">企查查</a>
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('5','website')" data-id="5">智联招聘</a>
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('6','website')" data-id="6">前程无忧</a>
-                                    <a href="javascript:void(0)" v-on:click="searchSelect('7','website')" data-id="7">赶集网</a>
-                                </span>
+                                    <span class="item-list">
+                                        <a href="javascript:void(0)" v-on:click="searchSelect('0','website')" class="current" name="all">不限</a>
+                                        <a href="javascript:void(0)" v-for="(value,key) in websiteMap" v-on:click="searchSelect(value.id,'website')" v-bind:data-id="value.id">{{value.name}}</a>
+                                    </span>
                                 </li>
                                 <li>
                                     <span class="item-title">其他：</span>
-                                <span class="item-list">
-                                    <a v-bind:class={"check-item":"true","current":isHavePhone} v-on:click="searchCheck(1)"><span class="icon"><span v-bind:class="{checked:isHavePhone}"></span></span><span class="font">有手机号码</span></a>
-                                    <a v-bind:class={"check-item":"true","current":isRecruitment} v-on:click="searchCheck(2)"><span class="icon"><span v-bind:class="{checked:isRecruitment}"></span></span><span class="font">有销售招聘信息</span></a>
-                                </span>
+                                    <span class="item-list">
+                                        <a v-bind:class={"check-item":"true","current":isHavePhone} v-on:click="searchCheck(1)"><span class="icon"><span v-bind:class="{checked:isHavePhone}"></span></span><span class="font">有手机号码</span></a>
+                                        <a v-bind:class={"check-item":"true","current":isRecruitment} v-on:click="searchCheck(2)"><span class="icon"><span v-bind:class="{checked:isRecruitment}"></span></span><span class="font">有销售招聘信息</span></a>
+                                    </span>
                                 </li>
                             </ul>
                         </div>
-                        <div class="more"><span class="down"></span></div>
+                        <div class="more"><span>显示更多选项</span><span class="down"></span></div>
+                    </div>
+                    <div class="search-content" style="display: none;">
+                        <span class="content-title">已选条件：</span>
+                        <ul>
+                            <div class="clearfix"></div>
+                        </ul>
+                        <span class="content-reset" v-on:click="reset()"><span></span><span>重置</span></span>
+                        <div class="clearfix"></div>
                     </div>
                 </div>
                 <div class="main-msg">
@@ -162,20 +151,31 @@
                         <!--列表无数据-->
                         <div class="blank-msg" v-bind:class={"hidden":tableData.list}>对不起，没有找到符合您条件的信息！</div>
                         <!--数据列表-->
-                        <table cellpadding="0" cellspacing="0" border="0" v-bind:class={"hidden":!tableData.list}>
+                        <table cellpadding="0" cellspacing="0" border="0" v-bind:class={"hidden":!tableData.list} class="table-special">
                             <thead>
                             <tr>
-                                <td style="width: 3%;"><a class="check-item" name="list-all"><span class="icon"><span class=""></span></span></a></span></span></td><td style="width: 27%;">企业名称</td><td style="width: 10%;">区域</td><td style="width: 15%;">行业</td><td style="width: 15%;">联系人</td><td style="width: 15%;">电话</td><td style="width: 15%;">操作</td>
+                                <td style="width: 2%;"><a class="check-item" name="list-all"><span class="icon"><span class=""></span></span></a></span></span></td>
+                                <td style="width: 20%;">企业名称</td>
+                                <td style="width: 24%;">地址</td>
+                                <td style="width: 10%;">行业</td>
+                                <td style="width: 10%;">规模</td>
+                                <td style="width: 10%;">联系人</td>
+                                <!--<td style="width: 8%;">职位</td>-->
+                                <td style="width: 10%;">电话</td>
+                                <td style="width: 8%;">推荐指数</td>
+                                <td style="width: 6%;"><span class="opts-title">操作</span></td>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="(value,key) in tableData.list" v-bind:data-id="value.id">
                                 <td><a class="check-item" name="list-item" v-bind:data-id="value.id"><span class="icon"><span class=""></span></span></a></td>
-                                <td>{{value.company}}</td>
-                                <td>{{value.province}}</td>
-                                <td>{{value.vocation}}</td>
-                                <td>{{value.name}}</td>
+                                <td v-bind:title="value.company">{{value.company_show}}</td>
+                                <td v-bind:title="value.address">{{value.address_show}}</td>
+                                <td v-bind:title="value.vocation">{{value.vocation_show}}</td>
+                                <td v-bind:title="value.memberSizeTag">{{value.memberSizeTag_show}}</td>
+                                <td v-bind:title="value.name">{{value.name_show}}</td>
                                 <td>{{value.mobile}}</td>
+                                <td class="f-red">{{value.companyScore}}</td>
                                 <td>
                                     <span class="opts">
                                         <a href="javascript:" class="detail" title="查看详情" v-on:click="showDetails(value.id)"></a>
@@ -220,6 +220,7 @@
                 <ul>
                     <li class="current" v-if="isHiddenDataMenu==false"><a href="datalist.html" ><span class="data"></span><p>检索与推送</p></a></li>
                     <li v-if="isHiddenStatisticsMenu==false"><a href="statistics.html"><span class="static"></span><p>数据统计</p></a></li>
+                    <!--<li><a href="https://datav.aliyun.com/share/fde136bccdb0e2fe457d84c0d9d1c4a1"><span class="dataview"></span><p>数据视图</p></a></li>-->
                 </ul>
             </div>
         </div>
@@ -267,7 +268,7 @@
                     <div class="modal-body" v-bind:data-id="Detail.id">
                         <div class="group-inline">
                             <span class="group-title">企业名称：</span>
-                            <span class="group-content">{{Detail.company}}</span>
+                            <span class="group-content">{{Detail.company}}<span class="score">{{Detail.companyScore}}分</span></span>
                         </div>
                         <div class="group-inline">
                             <span class="group-title">公司地址：</span>
@@ -320,7 +321,7 @@
     <script src="js/json2.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
-    <script src="js/page/base.js?v=135098531"></script>
-    <script src="js/page/datalist.js?v=135098531"></script>
+    <script src="js/page/base.js?v=de127098"></script>
+    <script src="js/page/datalist.js?v=de127098"></script>
 </body>
 </html>
