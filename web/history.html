@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/combo.select.min.css">
-    <link rel="stylesheet" href="css/page/history.css?v=de127098">
+    <link rel="stylesheet" href="css/page/history.css?v=11d96c3">
 </head>
 <body>
     <div class="containers" id="history">
@@ -148,6 +148,7 @@
                 <ul>
                     <li><a href="datalist.html"><span class="data"></span><p>检索与推送</p></a></li>
                     <li v-if="user.role!='user'"><a href="statistics.html"><span class="static"></span><p>数据统计</p></a></li>
+                    <li v-if="user.id==4"><a href="https://datav.aliyun.com/share/e415c1ef1a59e38cbc14a4b2abb4b9d0" target="_blank"><span class="dataview"></span><p>数据视图</p></a></li>
                 </ul>
             </div>
         </div>
@@ -230,8 +231,8 @@
     <script src="js/vue.min.js"></script>
     <script src="js/datepicker/WdatePicker.js"></script>
 
-    <script src="js/page/base/common.js?v=de127098"></script>
-    <script src="js/page/base.js?v=de127098"></script>
-    <script src="js/page/history.js?v=de127098"></script>
+    <script src="js/page/base/common.js?v=11d96c3"></script>
+    <script src="js/page/base.js?v=11d96c3"></script>
+    <script src="js/page/history.js?v=11d96c3"></script>
 </body>
 </html>
