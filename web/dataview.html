@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>营销线索检索与推送-数据视图</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/page/data-view.css">
+
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/echarts-all.min.js"></script>
+    <script src="js/json2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.min.js"></script>
+
+    <script src="js/page/base.js"></script>
+    <script src="js/page/dataview.js"></script>
+</head>
+<body>
+    <div class="data-view" id="dataview">
+        <div class="box-top">
+            <div class="top-title">
+                <img src="images/title.png">
+            </div>
+            <div class="top-title-bottom"></div>
+            <a href="statistics.html"></a>
+            <div class="top-times">
+                <span></span><p>{{search_time}}</p>
+            </div>
+        </div>
+        <div class="box box-1">
+            <div class="box-title">
+                <h3>省市营销线索排名Top10</h3>
+                <div class="box-title-bottom"></div>
+            </div>
+            <div class="box-charts" id="chart-bar-1"></div>
+        </div>
+        <div class="box box-2">
+            <div class="box-title">
+                <h3>线索评价分布情况</h3>
+                <div class="box-title-bottom"></div>
+            </div>
+            <div class="box-charts" id="chart-bar-2"></div>
+        </div>
+        <div class="box box-3">
+            <div class="box-info-1">
+                <div class="info-wrap-1">
+                    <div class="wrap-title">线索总量</div>
+                    <div class="wrap-content">{{data1.totalCount}}<span class="content-end">条</span></div>
+                </div>
+                <div class="info-wrap-1">
+                    <div class="wrap-title">当月新增线索量</div>
+                    <div class="wrap-content"><span class="content-begin">+</span>{{data1.addCount}}<span class="content-end">条</span></div>
+                </div>
+            </div>
+            <div class="box-charts" id="chart-map-1" style="width: 810px;height: 660px;position: relative;top: 40px;left: -15px;"></div>
+            <div class="box-timeline">
+                <div class="time-line"></div>
+                <span class="line-symbol s1"></span>
+                <span class="line-symbol s2"></span>
+                <span class="line-symbol s3"></span>
+                <span class="line-symbol s4"></span>
+                <span class="line-symbol s5"></span>
+                <span class="line-symbol-title t1">8月</span>
+                <span class="line-symbol-title t2">9月</span>
+                <span class="line-symbol-title t3">10月</span>
+                <span class="line-symbol-title t4">11月</span>
+                <span class="line-symbol-title t5">12月</span>
+            </div>
+        </div>
+        <div class="box box-4">
+            <div class="box-title">
+                <h3>当月线索接通率</h3>
+                <div class="box-title-bottom"></div>
+            </div>
+            <div class="box-charts charts-circle" id="chart-progress-1" style="height: 235px;">
+                <div class="chart-circle circle-green">
+                    <div class="circle-inner" id="connectCount-jishu">
+                        <span>技术</span>
+                        <h3>0%</h3>
+                        <div class="progressing"></div>
+                    </div>
+                </div>
+                <div class="chart-circle circle-blue">
+                    <div class="circle-inner" id="connectCount-shichang">
+                        <span>市场</span>
+                        <h3>0%</h3>
+                        <div class="progressing"></div>
+                    </div>
+                </div>
+                <div class="chart-circle circle-cyan">
+                    <div class="circle-inner" id="connectCount-qita">
+                        <span>其他</span>
+                        <h3>0%</h3>
+                        <div class="progressing"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-info">
+                <div class="info-wrap">
+                    <div class="wrap-title">线索接通总量</div>
+                    <div class="wrap-content">{{data3.connectCount.totalCount}}</div>
+                </div>
+                <div class="info-wrap">
+                    <div class="wrap-title">线索接通率</div>
+                    <div class="wrap-content">{{data3.connectCount.percent}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-5">
+            <div class="box-title">
+                <h3>当月线索意向率</h3>
+                <div class="box-title-bottom"></div>
+            </div>
+            <div class="box-charts charts-circle" id="chart-progress-2" style="height: 235px;">
+                <div class="chart-circle circle-green">
+                    <div class="circle-inner" id="intentedCount-jishu">
+                        <span>技术</span>
+                        <h3>0%</h3>
+                        <div class="progressing"></div>
+                    </div>
+                </div>
+                <div class="chart-circle circle-blue">
+                    <div class="circle-inner" id="intentedCount-shichang">
+                        <span>市场</span>
+                        <h3>0%</h3>
+                        <div class="progressing"></div>
+                    </div>
+                </div>
+                <div class="chart-circle circle-cyan">
+                    <div class="circle-inner" id="intentedCount-qita">
+                        <span>其他</span>
+                        <h3>0%</h3>
+                        <div class="progressing"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-info">
+                <div class="info-wrap">
+                    <div class="wrap-title">线索意向总量</div>
+                    <div class="wrap-content">{{data3.intentedCount.totalCount}}</div>
+                </div>
+                <div class="info-wrap">
+                    <div class="wrap-title">线索意向率</div>
+                    <div class="wrap-content">{{data3.intentedCount.percent}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-6">
+            <div class="box-title">
+                <h3>当月动态线索量</h3>
+                <div class="box-title-bottom"></div>
+            </div>
+            <div class="box-charts" id="chart-bar-3" style="width: 480px;height: 230px; float: left;">
+                <ul class="chart-bar">
+                    <li>
+                        <span>技术</span>
+                        <div class="progress-border" id="clueCount-jishu">
+                            <div class="progress-c1"></div>
+                            <div class="progress-c2"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <span>市场</span>
+                        <div class="progress-border" id="clueCount-shichang">
+                            <div class="progress-c1"></div>
+                            <div class="progress-c2"></div>
+                        </div>
+                    </li>
+                    <li>
+                        <span>其他</span>
+                        <div class="progress-border" id="clueCount-qita">
+                            <div class="progress-c1"></div>
+                            <div class="progress-c2"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="box-info float-right">
+                <div class="info-wrap">
+                    <div class="wrap-title">动态线索总量</div>
+                    <div class="wrap-content">{{data3.clueCount.totalCount}}</div>
+                </div>
+                <div class="info-wrap">
+                    <div class="wrap-title">新增线索量</div>
+                    <div class="wrap-content">{{data3.clueCount.addCount}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="box box-7">
+            <table border="0" cellpadding="0" cellspacing="0" class="box-table">
+                <thead>
+                    <tr>
+                        <td style="width: 10%;">&nbsp;</td>
+                        <td style="width: 30%;">科目</td>
+                        <td style="width: 15%;">技术</td>
+                        <td style="width: 15%;">其他</td>
+                        <td style="width: 15%;">市场</td>
+                        <td style="width: 15%;">合计</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span>1</span></td><td>有效沟通量（>30s）</td>
+                        <td v-for="(v,i) in data3.connected30Contact">{{v}}</td>
+                    </tr>
+                    <tr>
+                        <td><span>2</span></td><td>有效沟通量（>60s）</td>
+                        <td v-for="(v,i) in data3.connected60Contact">{{v}}</td>
+                    </tr>
+                    <tr>
+                        <td><span>3</span></td><td>有效沟通量（>120s）</td>
+                        <td v-for="(v,i) in data3.connected120Contact">{{v}}</td>
+                    </tr>
+                    <tr>
+                        <td><span>4</span></td><td>有效沟通量（>240s）</td>
+                        <td v-for="(v,i) in data3.connected240Contact">{{v}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-icon icon-logo">
+            <img src="images/logo-big.png">
+        </div>
+        <div class="box-icon icon-right">
+            <div class="line line-top"></div>
+            <div class="line line-bottom"></div>
+        </div>
+    </div>
+</body>
+</html>
