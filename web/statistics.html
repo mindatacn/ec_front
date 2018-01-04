@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/combo.select.min.css">
 
-    <link rel="stylesheet" href="css/page/statistics.css?v=d4f78901">
+    <link rel="stylesheet" href="css/page/statistics.css">
 </head>
 <body>
     <div class="containers statistics" id="statistics">
@@ -82,7 +82,7 @@
                                 </select>
                             </span>
                         </div>
-                        <div class="input-group-inline">
+                        <div class="input-group-inline" style="display: none;">
                             <span>成员名称：</span>
                             <span>
                                 <select class="select-box input-com" id="user-list">
@@ -139,11 +139,11 @@
                             <tr>
                                 <td style="width: 5%;">#</td>
                                 <td style="width: 10%;">团队</td>
-                                <td style="width: 15%;">联系人数量<span class="sorts"><span class="s-top current"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 15%;">系统渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 15%;">其他渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 15%;">联系人数量<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','totalCustomer',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','totalCustomer',false)"></span></span></td>
+                                <td style="width: 14%;">系统渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 14%;">其他渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                                 <td style="width: 10%;">沟通次数<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 10%;">沟通总时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 12%;">沟通总时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                                 <td style="width: 10%;">平均时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                                 <td style="width: 10%;">接通率<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                             </tr>
@@ -176,11 +176,11 @@
                                 <td style="width: 5%;">#</td>
                                 <td style="width: 10%;">团队</td>
                                 <td style="width: 10%;">成员</td>
-                                <td style="width: 11%;">联系人数量<span class="sorts"><span class="s-top"></span><span class="s-bottom current"></span></span></td>
-                                <td style="width: 13%;">系统渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 13%;">其他渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 11%;">联系人数量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 12%;">系统渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 12%;">其他渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                                 <td style="width: 11%;">沟通次数<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 11%;">沟通总时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 13%;">沟通总时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                                 <td style="width: 8%;">平均时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                                 <td style="width: 8%;">接通率<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
                             </tr>
@@ -205,9 +205,9 @@
             </div>
             <div class="aside">
                 <ul>
-                    <li v-if="isHiddenDataMenu==false"><a href="datalist.html"><span class="data"></span><p>检索与推送</p></a></li>
+                    <li v-if="isHiddenViewMenu==false"><a href="dataview.html" target="_blank"><span class="dataview"></span><p>数据视图</p></a></li>
                     <li class="current" v-if="isHiddenStatisticsMenu==false"><a href="statistics.html"><span class="static"></span><p>数据统计</p></a></li>
-                    <li v-if="isHiddenViewMenu==false"><a href="https://datav.aliyun.com/share/461d632cb3db7274382911ea40f4beb9" target="_blank"><span class="dataview"></span><p>数据视图</p></a></li>
+                    <li v-if="isHiddenDataMenu==false"><a href="datalist.html"><span class="data"></span><p>检索与推送</p></a></li>
                 </ul>
             </div>
         </div>
@@ -219,7 +219,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
     <script src="js/datepicker/WdatePicker.js"></script>
-    <script src="js/page/base.js?v=d4f78901"></script>
-    <script src="js/page/statistics.js?v=d4f78901"></script>
+    <script src="js/page/base.js"></script>
+    <script src="js/page/statistics.js"></script>
 </body>
 </html>
