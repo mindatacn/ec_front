@@ -2,14 +2,13 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>营销数据统计-营销线索平台</title>
+    <title>数据统计-营销线索平台</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/combo.select.min.css">
-
-    <link rel="stylesheet" href="css/page/statistics.css?v=19ca833">
+    <link rel="stylesheet" href="css/page/statistics.css?v=10118d4">
 </head>
 <body>
     <div class="containers statistics" id="statistics">
@@ -65,31 +64,31 @@
                     <div class="search-bottom">
                         <div class="input-group-inline">
                             <span>查询时间段：</span>
-                            <span>
-                                <input type="text" v-bind:value="startDate" class="input-com" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'end-date\')}'})" id="start-date">
-                            </span>
+                                <span>
+                                    <input type="text" v-bind:value="startDate" class="input-com" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'end-date\')}'})" id="start-date" disabled="disabled">
+                                </span>
                             <span>&nbsp;-&nbsp;</span>
-                            <span>
-                                <input type="text" v-bind:value="endDate" class="input-com" onclick="WdatePicker({minDate:'#F{$dp.$D(\'start-date\')}',maxDate:'%y'})" id="end-date">
-                            </span>
+                                <span>
+                                    <input type="text" v-bind:value="endDate" class="input-com" onclick="WdatePicker({minDate:'#F{$dp.$D(\'start-date\')}',maxDate:'%y'})" id="end-date" disabled="disabled">
+                                </span>
                         </div>
                         <div class="input-group-inline">
                             <span>团队名称：</span>
-                            <span>
-                                <select class="select-box input-com" id="department-list">
-                                     <option selected value="0">全部</option>
-                                    <option v-for="(value,key) in departmentList" v-bind:value="value.id">{{value.name}}</option>
-                                </select>
-                            </span>
+                                <span>
+                                    <select class="select-box input-com" id="department-list">
+                                        <option selected value="0">全部</option>
+                                        <option v-for="(value,key) in departmentList" v-bind:value="value.id">{{value.name}}</option>
+                                    </select>
+                                </span>
                         </div>
                         <div class="input-group-inline" style="display: none;">
                             <span>成员名称：</span>
-                            <span>
-                                <select class="select-box input-com" id="user-list">
-                                     <option value="0">全部</option>
-                                     <option v-for="(value,key) in userList" v-bind:value="value.id">{{value.name}}</option>
-                                </select>
-                            </span>
+                                <span>
+                                    <select class="select-box input-com" id="user-list">
+                                        <option value="0">全部</option>
+                                        <option v-for="(value,key) in userList" v-bind:value="value.id">{{value.name}}</option>
+                                    </select>
+                                </span>
                         </div>
                         <div class="input-group-inline">
                             <button type="button" class="btn-com" v-on:click="Search()">查询</button>
@@ -140,25 +139,25 @@
                                 <td style="width: 5%;">#</td>
                                 <td style="width: 10%;">团队</td>
                                 <td style="width: 15%;">联系人数量<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','totalCustomer',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','totalCustomer',false)"></span></span></td>
-                                <td style="width: 14%;">系统渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 14%;">其他渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 10%;">沟通次数<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 12%;">沟通总时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 10%;">平均时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 10%;">接通率<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 14%;">系统渠道使用量<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','pushCount',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','pushCount',false)"></span></span></td>
+                                <td style="width: 14%;">其他渠道使用量<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','noPushCount',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','noPushCount',false)"></span></span></td>
+                                <td style="width: 10%;">沟通次数<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','totalCallCount',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','totalCallCount',false)"></span></span></td>
+                                <td style="width: 12%;">沟通总时长<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','totalCallTime',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','totalCallTime',false)"></span></span></td>
+                                <td style="width: 10%;">平均时长<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','MeantimeLength',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','MeantimeLength',false)"></span></span></td>
+                                <td style="width: 10%;">接通率<span class="sorts"><span class="s-top" v-on:click="OrderBy('dept','ConnectionRate',true)"></span><span class="s-bottom" v-on:click="OrderBy('dept','ConnectionRate',false)"></span></span></td>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="(value,key) in sDepartmentList">
-                                <td>{{key+1}}</td>
-                                <td>{{value.deptName}}</td>
-                                <td>{{value.totalCustomer}}</td>
-                                <td>{{value.pushCount}}</td>
-                                <td>{{value.noPushCount}}</td>
-                                <td>{{value.totalCallCount}}</td>
-                                <td>{{value.totalCallTimeF}}秒</td>
-                                <td>{{value.MeantimeLength}}秒</td>
-                                <td>{{value.ConnectionRate}}%</td>
+                                <td v-if="key<5">{{key+1}}</td>
+                                <td v-if="key<5">{{value.deptName}}</td>
+                                <td v-if="key<5">{{value.totalCustomer}}</td>
+                                <td v-if="key<5">{{value.pushCount}}</td>
+                                <td v-if="key<5">{{value.noPushCount}}</td>
+                                <td v-if="key<5">{{value.totalCallCount}}</td>
+                                <td v-if="key<5">{{value.totalCallTimeF}}秒</td>
+                                <td v-if="key<5">{{value.MeantimeLength}}秒</td>
+                                <td v-if="key<5">{{value.ConnectionRate}}%</td>
                             </tr>
                             </tbody>
                         </table>
@@ -176,27 +175,27 @@
                                 <td style="width: 5%;">#</td>
                                 <td style="width: 10%;">团队</td>
                                 <td style="width: 10%;">成员</td>
-                                <td style="width: 11%;">联系人数量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 12%;">系统渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 12%;">其他渠道使用量<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 11%;">沟通次数<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 13%;">沟通总时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 8%;">平均时长<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
-                                <td style="width: 8%;">接通率<span class="sorts"><span class="s-top"></span><span class="s-bottom"></span></span></td>
+                                <td style="width: 11%;">联系人数量<span class="sorts"><span class="s-top" v-on:click="OrderBy('user','totalCustomer',true)"></span><span class="s-bottom" v-on:click="OrderBy('user','totalCustomer',false)"></span></span></td>
+                                <td style="width: 12%;">系统渠道使用量<span class="sorts"><span class="s-top" v-on:click="OrderBy('user','pushCount',true)"></span><span class="s-bottom" v-on:click="OrderBy('user','pushCount',false)"></span></span></td>
+                                <td style="width: 12%;">其他渠道使用量<span class="sorts"><span class="s-top" v-on:click="OrderBy('user','noPushCount',true)"></span><span class="s-bottom" v-on:click="OrderBy('user','noPushCount',false)"></span></span></td>
+                                <td style="width: 11%;">沟通次数<span class="sorts"><span class="s-top" v-on:click="OrderBy('user','totalCallCount',true)"></span><span class="s-bottom" v-on:click="OrderBy('user','totalCallCount',false)"></span></span></td>
+                                <td style="width: 13%;">沟通总时长<span class="sorts"><span class="s-top" v-on:click="OrderBy('user','totalCallTime',true)"></span><span class="s-bottom" v-on:click="OrderBy('user','totalCallTime',false)"></span></span></td>
+                                <td style="width: 8%;">平均时长<span class="sorts"><span class="s-top" v-on:click="OrderBy('user','MeantimeLength',true)"></span><span class="s-bottom" v-on:click="OrderBy('user','MeantimeLength',false)"></span></span></td>
+                                <td style="width: 8%;">接通率<span class="sorts"><span class="s-top" v-on:click="OrderBy('user','ConnectionRate',true)"></span><span class="s-bottom" v-on:click="OrderBy('user','ConnectionRate',false)"></span></span></td>
                             </tr>
                             </thead>
                             <tbody>
                             <tr v-for="(value,key) in sUserList">
-                                <td>{{key+1}}</td>
-                                <td>{{value.deptName}}</td>
-                                <td>{{value.userName}}</td>
-                                <td>{{value.totalCustomer}}</td>
-                                <td>{{value.pushCount}}</td>
-                                <td>{{value.noPushCount}}</td>
-                                <td>{{value.totalCallCount}}</td>
-                                <td>{{value.totalCallTimeF}}秒</td>
-                                <td>{{value.MeantimeLength}}秒</td>
-                                <td>{{value.ConnectionRate}}%</td>
+                                <td v-if="key<10">{{key+1}}</td>
+                                <td v-if="key<10">{{value.deptName}}</td>
+                                <td v-if="key<10">{{value.userName}}</td>
+                                <td v-if="key<10">{{value.totalCustomer}}</td>
+                                <td v-if="key<10">{{value.pushCount}}</td>
+                                <td v-if="key<10">{{value.noPushCount}}</td>
+                                <td v-if="key<10">{{value.totalCallCount}}</td>
+                                <td v-if="key<10">{{value.totalCallTimeF}}秒</td>
+                                <td v-if="key<10">{{value.MeantimeLength}}秒</td>
+                                <td v-if="key<10">{{value.ConnectionRate}}%</td>
                             </tr>
                             </tbody>
                         </table>
@@ -219,7 +218,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/vue.min.js"></script>
     <script src="js/datepicker/WdatePicker.js"></script>
-    <script src="js/page/base.js?v=19ca833"></script>
-    <script src="js/page/statistics.js?v=19ca833"></script>
+    <script src="js/page/base.js?v=10118d4"></script>
+    <script src="js/page/statistics.js?v=10118d4"></script>
 </body>
 </html>
