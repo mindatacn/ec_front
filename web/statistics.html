@@ -7,8 +7,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <link rel="stylesheet" href="css/normalize.min.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/combo.select.min.css">
-    <link rel="stylesheet" href="css/page/statistics.css?v=10118d4">
+    <!--<link rel="stylesheet" href="css/combo.select.min.css">-->
+    <link rel="stylesheet" href="css/page/statistics.css?v=15d01e18">
+    <!--javascript-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/json2.min.js"></script>
+    <script src="js/combo.select.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/datepicker/WdatePicker.js"></script>
+    <script src="js/page/base.js?v=15d01e18"></script>
+    <script src="js/page/statistics.js?v=15d01e18"></script>
 </head>
 <body>
     <div class="containers statistics" id="statistics">
@@ -59,78 +68,73 @@
             <div class="main">
                 <div class="main-search">
                     <div class="search-top">
-                        <h2>查询条件</h2>
-                    </div>
-                    <div class="search-bottom">
-                        <div class="input-group-inline">
-                            <span>查询时间段：</span>
-                                <span>
-                                    <input type="text" v-bind:value="startDate" class="input-com" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'end-date\')}'})" id="start-date" disabled="disabled">
-                                </span>
-                            <span>&nbsp;-&nbsp;</span>
-                                <span>
-                                    <input type="text" v-bind:value="endDate" class="input-com" onclick="WdatePicker({minDate:'#F{$dp.$D(\'start-date\')}',maxDate:'%y'})" id="end-date" disabled="disabled">
-                                </span>
-                        </div>
-                        <div class="input-group-inline">
-                            <span>团队名称：</span>
+                        <h2>数据统计</h2>
+                        <div class="search-right">
+                            <div class="input-group-inline">
+                                <span>查询时间段：</span>
+                            <span>
+                                <input type="text" v-bind:value="startDate" class="input-com" onclick="WdatePicker({maxDate:'#F{$dp.$D(\'end-date\')}'})" id="start-date">
+                            </span>
+                                <span>&nbsp;-&nbsp;</span>
+                            <span>
+                                <input type="text" v-bind:value="endDate" class="input-com" onclick="WdatePicker({minDate:'#F{$dp.$D(\'start-date\')}',maxDate:'%y'})" id="end-date">
+                            </span>
+                            </div>
+                            <div class="input-group-inline">
+                                <span>团队名称：</span>
                                 <span>
                                     <select class="select-box input-com" id="department-list">
                                         <option selected value="0">全部</option>
                                         <option v-for="(value,key) in departmentList" v-bind:value="value.id">{{value.name}}</option>
                                     </select>
                                 </span>
-                        </div>
-                        <div class="input-group-inline" style="display: none;">
-                            <span>成员名称：</span>
-                                <span>
-                                    <select class="select-box input-com" id="user-list">
-                                        <option value="0">全部</option>
-                                        <option v-for="(value,key) in userList" v-bind:value="value.id">{{value.name}}</option>
-                                    </select>
-                                </span>
-                        </div>
-                        <div class="input-group-inline">
-                            <button type="button" class="btn-com" v-on:click="Search()">查询</button>
+                            </div>
+                            <div class="input-group-inline">
+                                <button type="button" class="btn-com" v-on:click="Search()">查询</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <!--综合统计-->
-                <div class="main-msg" v-bind:class={"hidden":!sTotalList}>
-                    <div class="pull-left"><span class="front-blue">{{startDate}}</span>至<span class="front-blue">{{endDate}}</span>周期内整体统计数据如下：</div>
-                </div>
-                <div class="main-data" v-bind:class={"hidden":!sTotalList}>
-                    <div class="data-table">
-                        <table cellpadding="0" cellspacing="0" border="0">
-                            <thead>
-                            <tr>
-                                <td style="width: 16%;">联系人总数量</td>
-                                <td style="width: 16%;">系统推送数量</td>
-                                <td style="width: 16%;">其他渠道数量</td>
-                                <td style="width: 13%;">总沟通次数</td>
-                                <td style="width: 13%;">总沟通时长</td>
-                                <td style="width: 13%;">平均时长</td>
-                                <td style="width: 13%;">接通率</td>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-if="sTotalList!=null">
-                                <td>{{sTotalList.totalCustomer}}</td>
-                                <td>{{sTotalList.pushCount}}</td>
-                                <td>{{sTotalList.noPushCount}}</td>
-                                <td>{{sTotalList.totalCallCount}}</td>
-                                <td>{{sTotalList.totalCallTimeF}}秒</td>
-                                <td>{{sTotalList.MeantimeLength}}秒</td>
-                                <td>{{sTotalList.ConnectionRate}}%</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <!--综合统计-新-->
+                <div class="main-datas" v-if="sTotalList!=null">
+                    <div class="data-box">
+                        <div class="box-font">
+                            <h3>{{sTotalList.totalCustomer}}</h3>
+                            <p>联系人总数量</p>
+                        </div>
+                        <div class="box-img box-data1"></div>
                     </div>
+                    <div class="data-box">
+                        <div class="box-font">
+                            <h3>{{sTotalList.totalCallCount}}</h3>
+                            <p>总沟通次数</p>
+                        </div>
+                        <div class="box-img box-data2"></div>
+                    </div>
+                    <div class="data-box">
+                        <div class="box-font">
+                            <h3>{{sTotalList.totalCallTime}}秒</h3>
+                            <p>总沟通时长</p>
+                        </div>
+                        <div class="box-img box-data3"></div>
+                    </div>
+                    <div class="data-box">
+                        <div class="box-font">
+                            <h3>{{sTotalList.MeantimeLength}}秒</h3>
+                            <p>平均时长</p>
+                        </div>
+                        <div class="box-img box-data4"></div>
+                    </div>
+                    <div class="data-box">
+                        <div class="box-font">
+                            <h3>{{sTotalList.ConnectionRate}}%</h3>
+                            <p>接通率</p>
+                        </div>
+                        <div class="box-img box-data5"></div>
+                    </div>
+                    <!--<td>系统推送数量:{{sTotalList.pushCount}}</td><td>其他渠道数量:{{sTotalList.noPushCount}}</td>>-->
                 </div>
                 <!--部门统计-->
-                <div class="main-msg" v-bind:class={"hidden":!sDepartmentList}>
-                    <div class="pull-left"><span class="front-blue">{{startDate}}</span>至<span class="front-blue">{{endDate}}</span>周期内部门统计数据如下：</div>
-                </div>
                 <div class="main-data" v-bind:class={"hidden":!sDepartmentList}>
                     <div class="data-table1">
                         <table cellpadding="0" cellspacing="0" border="0">
@@ -149,24 +153,21 @@
                             </thead>
                             <tbody>
                             <tr v-for="(value,key) in sDepartmentList">
-                                <td v-if="key<5">{{key+1}}</td>
-                                <td v-if="key<5">{{value.deptName}}</td>
-                                <td v-if="key<5">{{value.totalCustomer}}</td>
-                                <td v-if="key<5">{{value.pushCount}}</td>
-                                <td v-if="key<5">{{value.noPushCount}}</td>
-                                <td v-if="key<5">{{value.totalCallCount}}</td>
-                                <td v-if="key<5">{{value.totalCallTimeF}}秒</td>
-                                <td v-if="key<5">{{value.MeantimeLength}}秒</td>
-                                <td v-if="key<5">{{value.ConnectionRate}}%</td>
+                                <td>{{key+1}}</td>
+                                <td>{{value.deptName}}</td>
+                                <td>{{value.totalCustomer}}</td>
+                                <td>{{value.pushCount}}</td>
+                                <td>{{value.noPushCount}}</td>
+                                <td>{{value.totalCallCount}}</td>
+                                <td>{{value.totalCallTime}}秒</td>
+                                <td>{{value.MeantimeLength}}秒</td>
+                                <td>{{value.ConnectionRate}}%</td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <!--成员统计-->
-                <div class="main-msg" v-bind:class={"hidden":!sUserList}>
-                    <div class="pull-left"><span class="front-blue">{{startDate}}</span>至<span class="front-blue">{{endDate}}</span>周期内成员统计数据如下：</div>
-                </div>
                 <div class="main-data bottom-40" v-bind:class={"hidden":!sUserList}>
                     <div class="data-table1">
                         <table cellpadding="0" cellspacing="0" border="0">
@@ -186,16 +187,16 @@
                             </thead>
                             <tbody>
                             <tr v-for="(value,key) in sUserList">
-                                <td v-if="key<10">{{key+1}}</td>
-                                <td v-if="key<10">{{value.deptName}}</td>
-                                <td v-if="key<10">{{value.userName}}</td>
-                                <td v-if="key<10">{{value.totalCustomer}}</td>
-                                <td v-if="key<10">{{value.pushCount}}</td>
-                                <td v-if="key<10">{{value.noPushCount}}</td>
-                                <td v-if="key<10">{{value.totalCallCount}}</td>
-                                <td v-if="key<10">{{value.totalCallTimeF}}秒</td>
-                                <td v-if="key<10">{{value.MeantimeLength}}秒</td>
-                                <td v-if="key<10">{{value.ConnectionRate}}%</td>
+                                <td>{{key+1}}</td>
+                                <td>{{value.deptName}}</td>
+                                <td>{{value.userName}}</td>
+                                <td>{{value.totalCustomer}}</td>
+                                <td>{{value.pushCount}}</td>
+                                <td>{{value.noPushCount}}</td>
+                                <td>{{value.totalCallCount}}</td>
+                                <td>{{value.totalCallTime}}秒</td>
+                                <td>{{value.MeantimeLength}}秒</td>
+                                <td>{{value.ConnectionRate}}%</td>
                             </tr>
                             </tbody>
                         </table>
@@ -211,14 +212,5 @@
             </div>
         </div>
     </div>
-    <!--javascript-->
-    <script src="js/jquery-1.11.3.min.js"></script>
-    <script src="js/json2.min.js"></script>
-    <script src="js/combo.select.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/vue.min.js"></script>
-    <script src="js/datepicker/WdatePicker.js"></script>
-    <script src="js/page/base.js?v=10118d4"></script>
-    <script src="js/page/statistics.js?v=10118d4"></script>
 </body>
 </html>
