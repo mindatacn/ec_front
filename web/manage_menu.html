@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>菜单管理-营销线索平台</title>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="css/normalize.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/page/manage.css">
+</head>
+<body>
+    <div class="containers" id="menu">
+        <div class="header">
+            <div class="logo">
+                <img src="images/logo.png"/>
+                <div class="logo-title">营销线索管理平台</div>
+            </div>
+            <div class="logout" onclick="logout()">
+                <a href="javascript:void(0)" title="退出登录"></a>
+            </div>
+            <div class="user-setting" onclick="window.location.href='setting.html'">
+                <span class="icon-setting" title="个人设置"></span>
+            </div>
+            <div class="user-info">
+                <div class="user-info-inner">
+                    <span class="user-icon"></span>
+                    <span class="user-name">{{user.username}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+            <div class="main">
+                <div class="search">
+                    <div class="search-title">
+                        <h3>查询条件</h3>
+                    </div>
+                    <div class="search-content">
+                        <div class="search-item-inline">
+                            <div class="search-item-title">菜单名称：</div>
+                            <div class="search-item-content">
+                                <input type="text" value="" class="text-common" id="menu-name">
+                            </div>
+                        </div>
+                        <div class="search-item-inline">
+                            <button type="button" class="btn-common" v-on:click="searchList()">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-common">
+                    <div class="main-msg">
+                        <div class="pull-left">查询符合上述条件的信息<span class="front-blue">{{data.totalCount}}</span>条</div>
+                        <div class="pull-right">
+                            <button type="button" class="btn-add" v-on:click="addMenu()">添加菜单</button>
+                        </div>
+                    </div>
+                    <div class="table-data">
+                        <!--列表无数据-->
+                        <div class="table-data-blank" v-if="data.totalCount<=0">对不起，没有找到符合您条件的信息！</div>
+                        <!--列表有数据-->
+                        <table cellpadding="0" cellspacing="0" border="0" v-if="data.totalCount>0">
+                            <thead>
+                                <tr>
+                                    <td style="width: 5%;">编号</td>
+                                    <td style="width: 10%;">类型</td>
+                                    <td style="width: 15%;">菜单名称</td>
+                                    <td style="width: 40%;">URL</td>
+                                    <td style="width: 10%;">是否启用</td>
+                                    <td style="width: 20%;">操作</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(value,key) in data.list">
+                                    <td>{{key+1}}</td>
+                                    <td>菜单</td>
+                                    <td>菜单管理</td>
+                                    <td>/page/manage/menu-manage.html</td>
+                                    <td>否</td>
+                                    <td>
+                                        <a href="javascript:void(0)">编辑</a>
+                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#com-alert-1">启用</a>
+                                        <a href="javascript:void(0)" data-toggle="modal" data-target="#com-alert-2">删除</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="aside">
+                <ul>
+                    <li class="current"><a href="#"><span class="dataview"></span><p>菜单管理</p></a></li>
+                    <li><a href="#"><span class="dataview"></span><p>角色管理</p></a></li>
+                    <li><a href="#"><span class="dataview"></span><p>组织管理</p></a></li>
+                    <li><a href="#"><span class="dataview"></span><p>部门管理</p></a></li>
+                    <li><a href="#"><span class="dataview"></span><p>成员管理</p></a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="modal fade modal-alert" id="com-alert-msg" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>菜单信息启用/删除成功/失败！</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-com" data-dismiss="modal">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-alert" id="com-alert-1" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>确定要启用/禁用此菜单项吗？</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn-com" data-dismiss="modal" data-toggle="modal" data-target="#com-alert-msg">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-alert" id="com-alert-2" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <h2>确定要删除此菜单项吗？</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn-com" data-dismiss="modal" data-toggle="modal" data-target="#com-alert-msg">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade modal-layer" id="com-layer-edit" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">添加/编辑菜单</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="group-inline">
+                            <span class="group-title"><span class="red">*</span>菜单名称：</span>
+                            <span class="group-content"><input type="text" class="text-common" id="m-name"></span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title"><span class="red">*</span>URL：</span>
+                            <span class="group-content"><input type="text" class="text-common" id="m-url"></span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title"><span class="red">*</span>菜单类型：</span>
+                            <span class="group-content">
+                                <select class="text-common" id="m-type">
+                                    <option value="0">目录</option>
+                                    <option value="1">菜单</option>
+                                    <option value="2">按钮</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title"><span class="red">*</span>父级菜单：</span>
+                            <span class="group-content">
+                                <select class="text-common" id="m-pid">
+                                    <option value="0">根结点</option>
+                                </select>
+                            </span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title"><span class="red">*</span>是否启用：</span>
+                            <span class="group-content">
+                                <input type="radio" name="isUsed" value="0">启用
+                                <input type="radio" name="isUsed" value="1">禁用
+                            </span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title"><span class="red">*</span>排序：</span>
+                            <span class="group-content"><input type="text" class="text-common" id="m-sort"></span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title"><span class="red">*</span>Icon：</span>
+                            <span class="group-content"><input type="text" class="text-common" id="m-icon"></span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">其他备注：</span>
+                            <span class="group-content"><input type="text" class="text-common" id="m-remark"></span>
+                        </div>
+                        <div class="group-inline">
+                            <span class="group-title">基本描述：</span>
+                            <span class="group-content"><textarea rows="4" class="text-area-common" ></textarea></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn-com" v-on:click="saveMenu()">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--javascript-->
+    <script src="js/jquery-1.11.3.min.js"></script>
+    <script src="js/json2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/vue.min.js"></script>
+    <script src="js/page/base.js"></script>
+    <script src="js/page/manage_menu.js"></script>
+</body>
+</html>
